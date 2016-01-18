@@ -20,13 +20,27 @@ UniStr = %clipboard%
 CnStr =% cn2uxxxx(UniStr)
 clipboard = %CnStr%
 Send, ^v
+return
 
 cn2uxxxx(cnStr)
-{ ; from tmplinshi
-    OldFormat := A_FormatInteger
+{ ; from tmplin = A_FormatInteger
     SetFormat, Integer, Hex
     Loop, Parse, cnStr
+    {
+    	;;\u4E2De
+      FoundPos := RegExMatch(A_LoopField, "\p{Han}")
+      ;;Msgbox %A_LoopField%
+      ;;Msgbox %FoundPos%
+    	;;if( A_LoopField = "a")
+      if( FoundPos = 0)
+      {
+      	out .= A_LoopField
+      }
+      else
+      {
         out .= "\u" . SubStr( Asc(A_LoopField), 3 )
+      }
+    }
     SetFormat, Integer, %OldFormat%
     Return out
 }
@@ -35,4 +49,3 @@ RemoveToolTip:
 SetTimer, RemoveToolTip, Off
 ToolTip
 return
-
